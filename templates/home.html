@@ -1,0 +1,688 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya&family=Alegreya+Sans&family=Open+Sans&display=swap"
+        rel="stylesheet">
+    <title>Hello, world!</title>
+
+    <style>
+        * {
+            font-family: 'Alegreya', serif;
+            transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+
+        input {
+            font-family: 'Alegreya Sans', sans-serif;
+        }
+
+        #trans:hover,
+        #long:hover,
+        .opt-button {
+            background-color: black !important;
+            color: whitesmoke;
+        }
+
+        .input-error {
+            border: 1px solid red !important;
+        }
+
+        legend {
+            float: none;
+            width: auto;
+            padding: 5px;
+            margin-bottom: 0.5rem;
+            font-size: calc(1.275rem + .3vw);
+            line-height: inherit;
+        }
+
+        fieldset {
+            min-width: 0;
+            padding: 4px;
+            margin: 4px;
+            border: 1px solid #ced4da;
+            ;
+        }
+
+        input {
+            border: 1px solid #ced4da;
+            transition: .15s ease-in-out;
+            box-shadow: none !important;
+        }
+
+        input:focus {
+            box-shadow: none !important;
+            border: 1px solid #222 !important;
+        }
+
+        .carousel-control-next-icon,
+        .carousel-control-prev-icon {
+            width: 1rem;
+            height: 2rem;
+        }
+
+        .btn-primary,
+        btn-check+.btn-primary {
+            color: #111 !important;
+            background-color: #fff !important;
+            border-color: #222 !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary:hover,
+        btn-check:focus+.btn-primary,
+        .btn-primary:focus {
+            color: #fff !important;
+            background-color: #222 !important;
+            border-color: #222 !important;
+            box-shadow: none !important;
+        }
+
+        .form-select:focus {
+            border-color: #222 !important;
+            outline: 0;
+            box-shadow: none !important;
+        }
+
+        .data-purpose {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 class="text-center">Composite Information</h2>
+    <div class="container-fluid">
+        <div class="row row-cols-sm-1 row-cols-md-2 gy-2">
+            <div class="col">
+
+
+                <div class="card">
+                    <h5 class="card-header text-center">Fibre</h5>
+                    <small class="px-2 py-1 mx-auto d-block fibre-error"></small>
+                    <div class="card-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="fibre_name">
+                            <label for="fibre_name">Name</label>
+                        </div>
+
+                        <div id="data_fibre_con">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+
+                <div class="card">
+                    <h5 class="card-header text-center">Matrix</h5>
+                    <small class="px-2 py-1 mx-auto d-block matrix-error"></small>
+                    <div class="card-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="matrix_name">
+                            <label for="matrix_name">Name</label>
+                        </div>
+
+                        <div id="data_matrix_con">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="">
+            <div class="card text-center">
+                <div class="card-header">
+                    Featured
+                </div>
+                <div class="card-body ">
+                    <small class="px-2 py-1 mx-auto d-block formular-error"></small>
+                    <div class="d-flex justify-content-around">
+                        <div class="d-flex justify-content-center align-items-center" id="long"
+                            style="height: 4rem;width: 14rem;background-color:transparent;border:1px solid #121212;border-radius:3px;user-select:none;cursor:pointer;">
+                            <p>Longitudinal</p>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center" id="trans"
+                            style="height: 4rem;width: 14rem;background-color:transparent;border:1px solid #121212;border-radius:3px;user-select:none;cursor:pointer;">
+                            <p>Transverse </p>
+                        </div>
+
+                    </div>
+                    <div id="display-formular">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <div class="row row-cols-sm-1 row-cols-md-2 gy-2">
+                        <small class="px-2 py-1 mx-auto d-block purpose-error"></small>
+                        <select class="form-select d-block col-6" id="purpose-select"
+                            aria-label="Default select example">
+                            {% for purpose in purposes %}
+                            <option value="{{purpose.usage}}">{{purpose.usage | title}}</option>
+                            {% endfor %}
+                        </select>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="d-block mx-auto btn btn-primary col-2 w-75" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Add A New Purpose
+                        </button>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add a new purpose</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/purpose" method="POST">
+                                        {% csrf_token %}
+                                        {{form.as_p}}
+                                        <button type="submit" class="d-block mx-auto btn btn-primary">Add</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row row-cols-sm-1 row-cols-md-2 gy-2 my-2 mx-auto data-purpose">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="Input1" class="form-label">Tensile Strength</label>
+                                    <input type="number" class="form-control purpose_tensile_strength" id="Input1">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="Input2" class="form-label">Young Modulus</label>
+                                    <input type="number" class="form-control purpose_young_modulus" id="Input2">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="text-center py-3 "><button type="button" class="btn btn-outline-dark"
+                id="submit-form">Submit</button></div>
+
+    </div>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+
+    <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <script>
+        const csrftoken = Cookies.get('csrftoken');
+
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // DOM loaded
+            {% block domready %}
+
+            let fibre = document.getElementById('fibre_name')
+            fibreError = document.querySelector('.fibre-error')
+
+
+            fibre.addEventListener('input', () => {
+                // send HTTP request
+                if (fibre.value.trim() !== '') {
+                    fibreError.textContent = ''
+                    url = '/fibre'
+                    const requestData = {
+                        fibre: fibre.value
+                    };
+
+                    options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        mode: 'same-origin',
+                        body: JSON.stringify(requestData)
+                    }
+                    fetch(url, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            con = document.getElementById('data_fibre_con')
+                            data = data.fibre
+                            console.log(data)
+                            con.innerHTML = ''
+                            if (data.length > 0) {
+                                if (data.length == 1) {
+                                    con.innerHTML += ` <fieldset>
+                                        <legend class="main-fibre-value">${data[0].name}</legend><div id="data-fibre" class="active" style="
+                                margin: 2px 0.3rem;">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control" id="tensile_strength_fibre"
+                                             value=${data[0].tensile_strength}>
+                                        <label for="tensile_strength_fibre">Tensile Strength</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control" id="young_modulus_fibre"
+                                             value=${data[0].young_modulus}>
+                                        <label for="young_modulus_fibre">Young Modulus</label>
+                                    </div>
+                                </div> </fieldset>`
+
+                                } else {
+                                    con.innerHTML = `<div id="carouselExampleDark" class="carousel carousel-dark slide mx-auto"
+                                data-bs-ride="carousel" data-bs-interval="false">
+
+                                <div class="carousel-inner">
+                                    
+                                    
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>`
+                                    carousel = document.querySelector('.carousel-inner')
+                                    for (let i = 0; i < data.length + 1; i++) {
+
+                                        carousel.innerHTML += `<div class="carousel-item ${i == 0 ? 'active' : ''}">
+                                    <div class=" mx-auto" style="width:100%;">
+                                        <fieldset class="main-fibre-value">
+                                            <legend>${data[i].name}</legend>
+                                        <div id="data-fibre">
+                                            <div class="form-floating mb-3">
+                                                <input type="number" class="form-control"
+                                                    id="tensile_strength_fibre"  value=${data[i].tensile_strength}>
+                                                <label for="tensile_strength_fibre">Tensile Strength</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="number" class="form-control" id="young_modulus_fibre"
+                                                     value=${data[i].tensile_strength}>
+                                                <label for="young_modulus_fibre">Young Modulus</label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    </div>
+
+                                </div>`
+
+
+                                    }
+                                }
+                            } else {
+                                con.innerHTML = `<div id="data-fibre" class="active" style="
+                            margin: 0.3rem;">
+                        <small> there was no result in the database </small>
+                        <fieldset>
+                            <legend class="main-fibre-value">${fibre.value}</legend>
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="tensile_strength_fibre"
+                                    " >
+                                <label for="tensile_strength_fibre">Tensile Strength</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="young_modulus_fibre"
+                                    " >
+                                <label for="young_modulus_fibre">Young Modulus</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>`
+                            }
+                            console.log(data)
+                        })
+                        .catch(error => {
+                            // Handle errors
+                            console.error('Fetch error:', error);
+                        });
+
+                } else {
+                    fibreError.textContent = 'please input a valid value'
+                }
+            });
+
+            matrixError = document.querySelector('.matrix-error')
+
+
+            let matrix = document.getElementById('matrix_name')
+            matrix.addEventListener('input', () => {
+                // send HTTP request
+                if (matrix.value.trim() !== '') {
+
+                    matrixError.textContent = ''
+                    url = '/matrix'
+                    const requestData = {
+                        matrix: matrix.value
+                    };
+
+                    options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        mode: 'same-origin',
+                        body: JSON.stringify(requestData)
+                    }
+                    fetch(url, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            con = document.getElementById('data_matrix_con')
+                            data = data.matrix
+                            console.log(data)
+                            con.innerHTML = ''
+                            if (data.length > 0) {
+                                if (data.length == 1) {
+                                    con.innerHTML += `<fieldset>
+                                    <legend class="main-matrix-value">${data[0].name}</legend><div id="data-matrix"  class="active" style="
+                            margin: 2px 0.3rem;">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control" id="tensile_strength_matrix"
+                                         value=${data[0].tensile_strength}>
+                                        <label for="tensile_strength_matrix">Tensile Strength</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control" id="young_modulus_matrix"
+                                         value=${data[0].young_modulus}>
+                                        <label for="young_modulus_matrix">Young Modulus</label>
+                                    </div>
+                                </div>
+                            </fieldset>`
+                                } else {
+                                    con.innerHTML = `<div id="carouselExampleDark2" class="carousel carousel-dark slide mx-auto"
+                                data-bs-ride="carousel" data-bs-interval="false">
+
+                                <div class="carousel-inner2">
+                                    
+                                    
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleDark2" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleDark2" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>`
+                                    carousel = document.querySelector('.carousel-inner2')
+                                    for (let i = 0; i < data.length + 1; i++) {
+
+                                        carousel.innerHTML += `<div class="carousel-item ${i == 0 ? 'active' : ''}">
+                                        <div class=" mx-auto" style="width:100%;">
+                                            <fieldset>
+                                                <legend class="main-matrix-value">${data[i].name}</legend>
+                                        <div id="data-matrix" class="active">
+                                            <div class="form-floating mb-3">
+                                                <input type="number" class="form-control"
+                                                    id="tensile_strength_matrix" value=${data[i].tensile_strength}>
+                                                <label for="tensile_strength_matrix">Tensile Strength</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="number" class="form-control" id="young_modulus_matrix"
+                                                 value=${data[i].tensile_strength}>
+                                                <label for="young_modulus_matrix">Young Modulus</label>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                    </div>
+
+                                </div>`
+
+
+                                    }
+                                }
+                            } else {
+                                con.innerHTML = `<div id="data-matrix" class="active" style="
+                            margin: 0.3rem;">
+                        <small> there was no result in the database </small>
+                        <fieldset>
+                            <legend class="main-matrix-value">${matrix.value}</legend>
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="tensile_strength_matrix"
+                                 >
+                                <label for="tensile_strength_matrix">Tensile Strength</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="young_modulus_matrix"
+                                 >
+                                <label for="young_modulus_matrix">Young Modulus</label>
+                            </div>
+                        </fieldset>
+                        </div>`
+                            }
+                            console.log(data)
+                        })
+                        .catch(error => {
+                            // Handle errors
+                            console.error('Fetch error:', error);
+                        });
+                } else {
+                    matrixError.textContent = 'please input a valid value'
+                }
+            });
+
+            let trans = document.getElementById('trans')
+            let long = document.getElementById('long')
+            let disp_form = document.getElementById('display-formular')
+            let formularError = document.querySelector('.formular-error')
+
+
+            trans.addEventListener('click', () => {
+                formularError.textContent = ''
+                disp_form.innerHTML = `
+                <div class="mx-auto" style="font-size: 2.4rem;">
+                    <div class="d-flex justify-content-center align-items-center m-3"
+                           style="border:1px solid #121212;border-radius:4px;">
+                           <div class="mx-5"> E<sub>c</sub> = </div>
+                           <div>
+                               <div>E<sub>f</sub> V<sub>f</sub></div>
+                               <hr>
+                               <div>E<sub>f</sub> V<sub>f</sub> + E<sub>f</sub> V<sub>f</sub></div>
+                           </div>
+                       </div> 
+                   </div>
+                `;
+                trans.classList.add('opt-button')
+                long.classList.remove('opt-button')
+            })
+            long.addEventListener('click', () => {
+                formularError.textContent = ''
+                disp_form.innerHTML = `
+                <div class="mx-auto" style="font-size: 2.4rem;">
+                    <div class="d-flex justify-content-center align-items-center m-3"
+                    style="border:1px solid #121212;border-radius:4px;">  E<sub>c</sub>= E<sub>m</sub>V<sub>m</sub> + E<sub>f</sub> V<sub>f</sub> </div> 
+                       
+                   </div>
+                `;
+                trans.classList.remove('opt-button')
+                long.classList.add('opt-button')
+            })
+
+            let purpose_select = document.querySelector('.form-select')
+            const purpose_con = document.querySelector('.data-purpose')
+            purpose_select.addEventListener('click', () => {
+                document.querySelector('.purpose-error').textContent = ''
+                purpose_con.style.display = 'flex'
+                let purpose_ym = document.querySelector('.purpose_young_modulus')
+                let purpose_ts = document.querySelector('.purpose_tensile_strength')
+                url = '/get_purpose'
+                const requestData = {
+                    'purpose': purpose_select.value
+                };
+
+                options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    mode: 'same-origin',
+                    body: JSON.stringify(requestData)
+                }
+                fetch(url, options)
+                    .then(response => response.json())
+                    .then(data => {
+                        data = data.purpose
+                        purpose_ts.value = data.tensile_strength
+                        purpose_ym.value = data.young_modulus
+
+                    })
+                    .catch(error => {
+                        // Handle errors
+                        console.error('Fetch error:', error);
+                    });
+
+
+            })
+            function check(element) {
+                value = element.value
+                return value
+
+            }
+            submit = document.getElementById('submit-form')
+            submit.addEventListener('click', () => {
+                //identify the errors and a class to the button add the names as datalist, redirect to error page
+                
+
+                con = document.getElementById('data_fibre_con')
+                fibreError = document.querySelector('.fibre-error')
+                fibreActive = con.querySelector('.active')
+                if (!fibreActive) {
+                    fibreError.textContent = 'please input a value'
+                }
+
+                con = document.getElementById('data_matrix_con')
+                matrixError = document.querySelector('.matrix-error')
+                matrixActive = con.querySelector('.active')
+                if (!matrixActive) {
+                    matrixError.textContent = 'please input a value'
+                }
+
+                purposeError = document.querySelector('.purpose-error')
+                console.log(purpose_con.style.display)
+                console.log(purposeError)
+                if (fibre.value.trim() === '' || fibreActive === null) {
+                    console.log('trying1')
+                    fibreError.textContent = 'please input a value'
+                } else if (matrix.value.trim() === '' || matrixActive === null) {
+                    if (matrixActive === null) {
+                        console.log('trying2')
+                    }
+                    matrixError.textContent = 'please input a value'
+                } else if (!document.querySelector('.opt-button')) {
+                    formularError.textContent = 'Please select a formular'
+                } else if (window.getComputedStyle(purpose_con).display === 'none') {
+
+                    console.log('trying3')
+                    purposeError.textContent = 'please select a value'
+                } else {
+                    fibre_young_modulus = fibreActive.querySelector('#young_modulus_fibre')
+                    fibre_tensile_strength = fibreActive.querySelector('#tensile_strength_fibre')
+                    matrix_young_modulus = matrixActive.querySelector('#young_modulus_matrix')
+                    matrix_tensile_strength = matrixActive.querySelector('#tensile_strength_matrix')
+                    let purpose_ym = document.querySelector('.purpose_young_modulus')
+                    let purpose_ts = document.querySelector('.purpose_tensile_strength')
+                    console.log(fibre_tensile_strength.value.length)
+                    if (fibre_tensile_strength.value == ''||  fibre_tensile_strength.value.length == 0  || fibre_tensile_strength.value < 1 || fibre_tensile_strength.value === NaN || fibre_tensile_strength.value === undefined ||
+                     fibre_young_modulus.value.length == 0  ||fibre_young_modulus.value == ''||fibre_young_modulus.value < 1 || fibre_young_modulus.value === NaN || fibre_young_modulus.value === undefined) {
+                        fibreError.textContent = 'please input a valid value'
+                    } else if (matrix_tensile_strength.value == ''||  matrix_tensile_strength.value.length == 0  ||matrix_tensile_strength.value < 1 || matrix_tensile_strength.value === NaN || matrix_tensile_strength.value === undefined ||
+                    matrix_young_modulus.value.length == 0  ||matrix_young_modulus.value == ''||matrix_young_modulus.value < 1 || matrix_young_modulus.value === NaN || matrix_young_modulus.value === undefined) {
+                        matrixError.textContent = 'please input a valid value'
+                    } else if ( purpose_ts.value.length == 0  ||purpose_ts.value == ''||purpose_ts.value < 1 || purpose_ts.value === NaN || purpose_ts.value === undefined ||
+                    purpose_ym.value.length == 0  ||purpose_ym.value == ''||purpose_ym.value < 1 || purpose_ym.value === NaN || purpose_ym.value === undefined) {
+                        fibreError.textContent = 'please input a valid value'
+                    } else {
+                     const form = {}
+                 form.fibre_name = fibreActive.querySelector('.main-fibre-value').textContent;
+                 form.fibre_tensile_strength = fibre_tensile_strength.value;
+                 form.fibre_young_modulus = fibre_young_modulus.value;
+                 form.matrix_name = matrixActive.querySelector('.main-matrix-value').textContent;
+                 form.matrix_tensile_strength = matrix_tensile_strength.value;
+                 form.matrix_young_modulus =  matrix_young_modulus.value;
+                 form.purpose_select = purpose_select.value;
+                 form.purpose_tensile_strength = purpose_ts.value;
+                 form.purpose_young_modulus = purpose_ym.value;
+                form.opt = document.querySelector('.opt-button').id;
+                 url = '/make_composite'
+ 
+ 
+                 options = {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json',
+                         'X-CSRFToken': csrftoken
+                     },
+                     mode: 'same-origin',
+                     body: JSON.stringify(form)
+                 }
+                 fetch(url, options)
+                     .then(response => response.json())
+                     .then(data => {
+                         window.location.href = data.url
+ 
+                     })
+                     .catch(error => {
+                         // Handle errors
+                         console.error('Fetch error:', error);
+                     });
+                    }
+
+
+
+
+                }
+
+
+            
+            })
+
+            {% endblock %}
+        })
+
+
+    </script>
+</body>
+
+</html>
